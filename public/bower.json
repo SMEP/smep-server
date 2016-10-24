@@ -1,0 +1,25 @@
+{
+  "name": "SMEP.Web",
+  "authors": [
+    "matheusmb "
+  ],
+  "description": "SMEP",
+  "main": "",
+  "moduleType": [],
+  "license": "Proprietary",
+  "homepage": "index.html",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap-sass": "^3.3.6",
+    "bootstrap": "^3.3.6",
+    "odometer": "^0.4.7",
+    "angular-chart.js": "^0.10.2"
+  }
+}

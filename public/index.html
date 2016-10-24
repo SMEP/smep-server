@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="SmepApp">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+
+    <title>SMEP Painel</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- Custom styles for this template -->
+    <link href="static/css/dashboard.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+    <!-- Angular App -->
+    <script src="static/js/angular.min.js"></script><!-- load angular -->
+
+    <script src="static/js/services/samples.js"></script>
+    <script src="static/js/controllers/smep.js"></script> <!-- load up our controller -->
+
+    <script src="components/Chart.js/Chart.js"></script>
+    <script src="components/angular-chart.js/dist/angular-chart.min.js"></script> <!-- Shoul be repeated?! -->
+
+
+    <script src="static/js/core.js"></script> <!-- load our main application -->
+
+    <script>
+        window.odometerOptions = {
+            auto : false
+        };
+    </script>
+    <script src="static/js/odometer.js"></script>
+
+
+    <!-- Odometer -->
+
+    <link href="components/odometer/themes/odometer-theme-car.css" rel="stylesheet" />
+    <style>
+        .tomada {
+            height:250px;
+        }
+        .odometer {
+            font-size: 100px; /* big */
+            color: #27B157 /* money */
+        }
+
+        /* Show a $ sign before the number */
+        .odometer .odometer-inside:before {
+            content: "R$:";
+            display: inline-block;
+            vertical-align: sup;
+            opacity: .6;
+            font-size: .85em;
+            margin-right: .12em
+        }
+
+        /* Hide the first digit, first formatting comma, and last digit */
+        .odometer .odometer-inside .odometer-digit:nth-child(1),
+        .odometer .odometer-inside .odometer-formatting-mark:nth-child(2),
+        .odometer .odometer-inside .odometer-digit:last-child {
+            display: none
+        }
+
+        .odometer.odometer-theme-car .odometer-digit:nth-last-child(2) {
+            -moz-border-radius: 0 0.2em 0.2em 0;
+            -webkit-border-radius: 0 0.2em 0.2em 0;
+            -o-border-radius: 0 0.2em 0.2em 0;
+            -ms-border-radius: 0 0.2em 0.2em 0;
+            -khtml-border-radius: 0 0.2em 0.2em 0;
+            border-radius: 0 0.2em 0.2em 0;
+            background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #eee0d3), color-stop(40%, #eee0d3), color-stop(60%, #bbaa9a), color-stop(80%, #eee0d3), color-stop(100%, #eee0d3));
+            background-image: -webkit-linear-gradient(top, #eee0d3 0%, #eee0d3 40%, #bbaa9a 60%, #eee0d3 80%, #eee0d3 100%);
+            background-image: -moz-linear-gradient(top, #eee0d3 0%, #eee0d3 40%, #bbaa9a 60%, #eee0d3 80%, #eee0d3 100%);
+            background-image: -o-linear-gradient(top, #eee0d3 0%, #eee0d3 40%, #bbaa9a 60%, #eee0d3 80%, #eee0d3 100%);
+            background-image: -ms-linear-gradient(top, #eee0d3 0%, #eee0d3 40%, #bbaa9a 60%, #eee0d3 80%, #eee0d3 100%);
+            background-image: linear-gradient(top, #eee0d3 0%, #eee0d3 40%, #bbaa9a 60%, #eee0d3 80%, #eee0d3 100%);
+            background-color: #eee0d3;
+            color: black;
+        }
+
+
+    </style>
+
+</head>
+
+<body ng-controller="smepController">
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">SMEP</a>
+        </div>
+
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li class="active"><a href="#">Início <span class="sr-only">(current)</span></a></li>
+                <li><a href="#"> Relatórios</a></li>
+                <li><a href="#">Metas</a></li>
+                <li><a href="#">Configurações</a></li>
+            </ul>
+        </div>
+
+
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <h1 class="page-header">SMEP Painel</h1>
+
+            <div class="row">
+                <h2 class="sub-header">Informações</h2>
+                <div class="col-sm-6">
+                    <h3>Anual - {{date | date:'yyyy' }}</h3>
+                    <canvas id="line" class="chart chart-line" chart-data="consumo_mensal" chart-labels="labels" chart-series="series"></canvas>
+                </div>
+
+
+                <div class="col-sm-6">
+                    <h3>Consumo Últimos 5 minutos [kW]</h3>
+                    <canvas class="chart chart-line" chart-data="data_lastMinutes" chart_labels="labels_lastMinutes" chart-series="series_lastMinutes"></canvas>
+
+                </div>
+            </div>
+            <div class="row">
+                <h2 class="sub-header">Última amostra</h2>
+                <p>Consumo Instantâneo: {{ lastPower }} kW</p>
+                <p>Consumo kWh: {{ lastkWh }} kWh</p>
+                <p>Data: {{ lastDate | date:'hh:mm:ss d/m/y' }}</p>
+
+            </div>
+
+            <div class="row">
+                <h2 class="sub-header">Dispositivos Conectados</h2>
+
+
+                <div class="row" >
+                    <div class="col-sm-6 col-md-3" ng-repeat="tomada in tomadas">
+                        <div class="tomada panel panel-info">
+                            <div class="panel-heading">{{ tomada.nome }} <sub class="pull-right">{{ tomada.mac }}</sub></div>
+                            <div class="panel-body">
+                                <p><strong>Consumido no dia:</strong> {{ tomada.stats.dia | number : 2}} kWh</p>
+                                <p><strong>Consumido no mês:</strong> {{ tomada.stats.mes | number : 2 }} kWh</p>
+                                <p><strong>Consumido no ano:</strong>  {{ tomada.stats.ano | number : 2}} kWh</p>
+                                <div angular-odometer style="font-size: 22px;" my-current-valor-single="{{tomada.mac}}">1000,001</div>
+                            </div>
+                            <div class="panel-footer">
+                                Pronto
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<a class="btn btn-primary" data-toggle="modal" href="#modal-id">Trigger modal</a>
+<div class="modal fade" id="modal-id">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>-->
+<script>window.jQuery || document.write('<script src="components/jquery/dist/jquery.min.js"><\/script>')</script>
+<script src="components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+<script>
+    window.odometerOptions = { // Not workind?!
+        auto: true, // Don't automatically initialize everything with class 'odometer'
+        selector: '.odometer', // Change the selector used to automatically find things to be animated
+        format: '(,ddd).dd', // Change how digit groups are formatted, and how many digits are shown after the decimal point
+        theme: 'car' // Specify the theme (if you have more than one theme css file on the page)
+    };
+</script>
+
+<!--<script src="components/odometer/odometer.min.js"></script>-->
+<script>
+
+    /*(function($){
+     $(document).ready(function() {
+
+
+     var i = 0;
+     var odometer = $('.odometer');
+     setInterval(function() {
+     odometer.text( i++ );
+     }, 2200);
+     })
+     })(window.jQuery);*/
+</script>
+
+</body>
+</html>
