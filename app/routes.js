@@ -18,7 +18,8 @@ module.exports = function( app ) {
             kWh         : kWh,
             voltage     : voltage,
             offset      : offset,
-            sample      : sample
+            sample      : sample,
+            received    : new Date()
         }, function(err, sample) {
             if(err) {
                 console.log(err);
@@ -79,7 +80,25 @@ module.exports = function( app ) {
 
     app.get( '/stats/lastSeconds', function(req, res) {
         var date = new Date();
+        console.log(date);
         date.setSeconds( date.getSeconds() - 10);
+        console.log(date);
+        Samples.aggregate(
+            [
+                { $project : { power : 1, received : 1, hour : { $hour : "$received"}, minute : { $minute : "$received"}, second : { $second : "$received"} } },
+                { $match :  { "received" : { $gte : date} } },
+                //{ $group : { _id : { "hour" : "$hour", "minute" : "$minute", "second" : "$second" }, total : { $sum : "$power" } } },
+                { $sort : {  received : 1} }
+            ],
+            function( err, result ) {
+                res.json( result );
+            }
+        );
+    });
+
+    app.get( '/stats/allAfter/:date', function(req, res) {
+        var date = new Date(req.params.date);
+
         Samples.aggregate(
             [
                 { $project : { power : 1, received : 1, hour : { $hour : "$received"}, minute : { $minute : "$received"}, second : { $second : "$received"} } },
@@ -97,5 +116,5 @@ module.exports = function( app ) {
         Samples.findOne().sort( { received : -1 } ).exec( function( err, sample ) {
             res.send( sample );
         } );
-    })
+    });
 };

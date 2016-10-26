@@ -7,5 +7,5 @@ module.exports = mongoose.model('Samples', {
     voltage : { type: Number, required : true },
     offset : { type : Number, required : true },
     sample : { type: Number, required : true},
-    received : { type: Date, required: true, default: Date.now() }
+    received : { type: Date, required: true, default: new Date()}
 });

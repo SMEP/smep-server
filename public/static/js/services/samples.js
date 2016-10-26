@@ -14,7 +14,11 @@ angular.module('samplesService', [])
             },
             getLast : function() {
                 return $http.get( host + '/stats/last');
+            },
+            getAllAfter : function( lastTime ) {
+                return $http.get( host + '/stats/allAfter/' + lastTime);
             }
+
 
         }
     }]);
