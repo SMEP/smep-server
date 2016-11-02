@@ -117,4 +117,9 @@ module.exports = function( app ) {
             res.send( sample );
         } );
     });
+
+    app.all( '/*', function(req, res) {
+        var path = require('path');
+        res.sendFile( path.resolve( __dirname + '/../public/index.html' ) );
+    })
 };
