@@ -26,16 +26,19 @@
 
 
     <!-- Angular App -->
-    <script src="static/js/angular.min.js"></script><!-- load angular -->
+    <script src="components/angular/angular.js" ></script><!-- load angular -->
+    <script src="components/angular-route/angular-route.js" ></script><!-- load angular-route -->
 
     <script src="static/js/services/samples.js"></script>
     <script src="static/js/controllers/smep.js"></script> <!-- load up our controller -->
+    <script src="static/js/components/smep.component.js"></script>
 
     <script src="components/Chart.js/Chart.js"></script>
     <script src="components/angular-chart.js/dist/angular-chart.min.js"></script> <!-- Shoul be repeated?! -->
 
 
     <script src="static/js/core.js"></script> <!-- load our main application -->
+    <script src="static/js/app.config.js"></script> <!-- load our main application -->
 
     <script>
         window.odometerOptions = {
@@ -96,7 +99,7 @@
 
 </head>
 
-<body ng-controller="smepController">
+<body>
 
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
@@ -117,8 +120,8 @@
     <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
-                <li class="active"><a href="#">Início <span class="sr-only">(current)</span></a></li>
-                <li><a href="#"> Relatórios</a></li>
+                <li class="active"><a href="/#/">Início <span class="sr-only">(current)</span></a></li>
+                <li><a href="/#/reports"> Relatórios</a></li>
                 <li><a href="#">Metas</a></li>
                 <li><a href="#">Configurações</a></li>
             </ul>
@@ -126,56 +129,7 @@
 
 
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-            <h1 class="page-header">SMEP Painel</h1>
-
-            <div class="row">
-                <h2 class="sub-header">Informações</h2>
-                <div class="col-sm-6">
-                    <h3>Anual - {{date | date:'yyyy' }}</h3>
-                    <canvas id="line" class="chart chart-line" chart-data="consumo_mensal" chart-labels="labels" chart-series="series"></canvas>
-                </div>
-
-
-                <div class="col-sm-6">
-                    <h3>Consumo Últimos 5 minutos [kW]</h3>
-                    <canvas class="chart chart-line" chart-data="data_lastMinutes" chart_labels="labels_lastMinutes" chart-series="series_lastMinutes"></canvas>
-
-                </div>
-            </div>
-            <div class="row">
-                <h2 class="sub-header">Última amostra</h2>
-                <p>Consumo Instantâneo: {{ lastPower }} kW</p>
-                <p>Consumo kWh: {{ lastkWh }} kWh</p>
-                <p>Data: {{ lastDate | date:'hh:mm:ss d/m/y' }}</p>
-
-            </div>
-
-            <div class="row">
-                <h2 class="sub-header">Dispositivos Conectados</h2>
-
-
-                <div class="row" >
-                    <div class="col-sm-6 col-md-3" ng-repeat="tomada in tomadas">
-                        <div class="tomada panel panel-info">
-                            <div class="panel-heading">{{ tomada.nome }} <sub class="pull-right">{{ tomada.mac }}</sub></div>
-                            <div class="panel-body">
-                                <p><strong>Consumido no dia:</strong> {{ tomada.stats.dia | number : 2}} kWh</p>
-                                <p><strong>Consumido no mês:</strong> {{ tomada.stats.mes | number : 2 }} kWh</p>
-                                <p><strong>Consumido no ano:</strong>  {{ tomada.stats.ano | number : 2}} kWh</p>
-                                <div angular-odometer style="font-size: 22px;" my-current-valor-single="{{tomada.mac}}">1000,001</div>
-                            </div>
-                            <div class="panel-footer">
-                                Pronto
-                            </div>
-                        </div>
-
-                    </div>
-
-
-                </div>
-
-
-            </div>
+            <div ng-view></div>
 
 
         </div>

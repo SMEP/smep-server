@@ -1,1 +1,1 @@
-angular.module('SmepApp', ['smepController', 'samplesService'] );
+angular.module('SmepApp', ['ngRoute', 'smep', 'samplesService'] );

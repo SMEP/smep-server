@@ -1,4 +1,5 @@
-angular.module('smepController', [ 'chart.js'] )
+'use strict';
+angular.module('smep', [ 'chart.js'] )
     .controller('smepController', ['$scope','$http', 'Samples', '$interval' , function($scope, $http, Samples, $interval) {
         $scope.valor = 1000000;
 
