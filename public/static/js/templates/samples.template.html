@@ -2,21 +2,45 @@
 
 <div class="row">
     <h2 class="sub-header">Informações</h2>
-    <div class="col-sm-6">
-        <h3>Anual - {{date | date:'yyyy' }}</h3>
-        <canvas id="line" class="chart chart-line" chart-data="consumo_mensal" chart-labels="labels" chart-series="series"></canvas>
+    <div class="col-md-6">
+        <ul class="nav nav-tabs">
+            <li><a href="#" data-target="#day" data-toggle="tab">Diário</a></li>
+            <li class="active"><a href="#" data-target="#month" data-toggle="tab">Mensal</a></li>
+            <li><a href="#" data-target="#year" data-toggle="tab">Mensal</a></li>
+
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane" id="day">
+                <h3>Diário - {{date | date:'dd/MM/yyyy' }}</h3>
+            </div>
+
+            <div class="tab-pane active" id="month">
+                <h3>Mensal - {{date | date:'MMM/yyyy' }}</h3>
+            </div>
+
+            <div class="tab-pane" id="year">
+                <h3>Anual - {{date | date:'yyyy' }}</h3>
+            </div>
+        </div>
+
     </div>
 
 
-    <div class="col-sm-6">
+    <div class="col-md-6" ng-controller="ChartLastMinutesCtrl">
         <h3>Consumo Últimos 5 minutos [kW]</h3>
-        <canvas class="chart chart-line" chart-data="data_lastMinutes" chart_labels="labels_lastMinutes" chart-series="series_lastMinutes"></canvas>
+        <canvas class="chart chart-line"
+                chart-data="data"
+                chart_labels="labels"
+                chart-series="series"
+                chart-options="options"
+        ></canvas>
 
     </div>
 </div>
 <div class="row">
     <h2 class="sub-header">Última amostra</h2>
-    <p>Consumo Instantâneo: {{ lastPower }} kW</p>
+    <p>Consumo Instantâneo: {{ lastPower | number : 4 }} kW</p>
     <p>Consumo kWh: {{ lastkWh | number : 4 }} kWh</p>
     <p>Data: {{ lastDate | date:'hh:mm:ss d/m/y' }}</p>
 

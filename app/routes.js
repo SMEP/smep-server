@@ -1,8 +1,10 @@
+'use strict';
 var Samples = require('./models/samples');
+
 
 module.exports = function( app ) {
     app.post('/sample', function(req, res) {
-        var power = req.body.power / 1000; // W -> kW
+        var power = req.body.power;
         var interval = req.body.interval;
         var fracHour = interval / 3600;
         var voltage = req.body.voltage;
@@ -12,6 +14,10 @@ module.exports = function( app ) {
 
         var kWh = power * fracHour;
 
+
+        var date = new Date();
+        //date.setMinutes( date.getMinutes() - date.getTimezoneOffset() ); // Timezone
+
         Samples.create( {
             power       : power,
             interval    : interval,
@@ -19,7 +25,7 @@ module.exports = function( app ) {
             voltage     : voltage,
             offset      : offset,
             sample      : sample,
-            received    : new Date()
+            received    : date
         }, function(err, sample) {
             if(err) {
                 console.log(err);
@@ -29,6 +35,58 @@ module.exports = function( app ) {
         console.log(req.body);
 
         res.send('ok');
+    });
+
+
+    app.get('/stats/total/:type', function(req, res) {
+        var type = req.params.type;
+        var d = new Date();
+
+        var date = { day : d.getDate(), month : d.getMonth()+1, year : d.getFullYear() };
+
+
+
+
+        switch(type) {
+            case 'year':
+                var query = [
+                                { $project : { kWh : 1, month : { $month : "$received" }, year : { $year : "$received" } } },
+                                { $match : {  year : date.year } },
+                                { $group : { _id : "$month", total : { $sum : "$kWh" } } },
+                                { $sort : { _id : 1 } } // ASC
+                            ];
+                break;
+
+            case 'month':
+                var query = [
+                                { $project : { kWh : 1, day : { $dayOfMonth : "$received" }, month : { $month : "$received" }, year : { $year : "$received" } } },
+                                { $match : {  month : date.month,  year : date.year } }, // getMonth returns [0, 11]
+                                { $group : { _id : "$day", total : { $sum : "$kWh" } } },
+                                { $sort : { _id : 1 } } // ASC
+                             ];
+                break;
+
+            case 'day':
+            default:
+                var query = [
+                    { $project : { kWh : 1, hour : { $hour : "$received" }, day : { $dayOfMonth : "$received" }, month : { $month : "$received" }, year : { $year : "$received" } } },
+                    { $match : { day : date.day, month : date.month,  year : date.year } },
+                    { $group : { _id : "$hour", total : { $sum : "$kWh" } } },
+                    { $sort : { _id : 1 } } // ASC
+                ];
+        }
+
+        Samples.aggregate( query, function(err, result) {
+            if( err ) {
+                console.log( err );
+                res.send(err);
+            } else {
+                res.json( result );
+            }
+
+
+        })
+
     });
 
 

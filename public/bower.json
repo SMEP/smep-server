@@ -20,8 +20,10 @@
     "bootstrap-sass": "^3.3.6",
     "bootstrap": "^3.3.6",
     "odometer": "^0.4.7",
-    "angular-chart.js": "^0.10.2",
+    "angular-chart.js": "^1.0.3",
     "angular": "^1.5.8",
-    "angular-route": "^1.5.8"
+    "angular-route": "^1.5.8",
+    "moment": "^2.15.2",
+    "angular-moment": "^1.0.0"
   }
 }
