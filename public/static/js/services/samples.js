@@ -17,6 +17,9 @@ angular.module('samplesService', [])
             },
             getAllAfter : function( lastTime ) {
                 return $http.get( host + '/stats/allAfter/' + lastTime);
+            },
+            getPeriodicData : function( period ) {
+                return $http.get( host + '/stats/periodic/' + period );
             }
 
 

@@ -38,7 +38,7 @@ module.exports = function( app ) {
     });
 
 
-    app.get('/stats/total/:type', function(req, res) {
+    app.get('/stats/periodic/:type', function(req, res) {
         var type = req.params.type;
         var d = new Date();
 

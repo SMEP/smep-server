@@ -9,7 +9,7 @@ angular.module('smep', [ 'chart.js', 'angularMoment'] )
 
         $interval( function() {
             Samples.getLast().success( function( data ) {
-                $scope.lastPower = data.power;
+                $scope.lastPower = data.power / 1000;
                 $scope.lastkWh = data.kWh;
                 $scope.lastDate = new Date( data.received );
             } );

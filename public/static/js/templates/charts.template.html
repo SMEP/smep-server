@@ -1,0 +1,38 @@
+<ul class="nav nav-tabs">
+    <li><a href="#" data-target="#day" data-toggle="tab">Diário</a></li>
+    <li class="active"><a href="#" data-target="#month" data-toggle="tab">Mensal</a></li>
+    <li><a href="#" data-target="#year" data-toggle="tab">Anual</a></li>
+
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane" id="day">
+        <h3>Diário - {{date | date:'dd/MM/yyyy' }}</h3>
+        <canvas class="chart chart-line"
+                chart-data="day_data"
+                chart-labels="day_labels"
+                chart-series="day_series"
+                chart-options="day_options"
+        ></canvas>
+    </div>
+
+    <div class="tab-pane active" id="month">
+        <h3>Mensal - {{date | date:'MMM/yyyy' }}</h3>
+        <canvas class="chart chart-line"
+                chart-data="month_data"
+                chart-labels="month_labels"
+                chart-series="month_series"
+                chart-options="month_options"
+        ></canvas>
+    </div>
+
+    <div class="tab-pane" id="year">
+        <h3>Anual - {{date | date:'yyyy' }}</h3>
+        <canvas class="chart chart-line"
+                chart-data="year_data"
+                chart-labels="year_labels"
+                chart-series="year_series"
+                chart-options="year_options"
+        ></canvas>
+    </div>
+</div>

@@ -2,36 +2,14 @@
 
 <div class="row">
     <h2 class="sub-header">Informações</h2>
-    <div class="col-md-6">
-        <ul class="nav nav-tabs">
-            <li><a href="#" data-target="#day" data-toggle="tab">Diário</a></li>
-            <li class="active"><a href="#" data-target="#month" data-toggle="tab">Mensal</a></li>
-            <li><a href="#" data-target="#year" data-toggle="tab">Mensal</a></li>
-
-        </ul>
-
-        <div class="tab-content">
-            <div class="tab-pane" id="day">
-                <h3>Diário - {{date | date:'dd/MM/yyyy' }}</h3>
-            </div>
-
-            <div class="tab-pane active" id="month">
-                <h3>Mensal - {{date | date:'MMM/yyyy' }}</h3>
-            </div>
-
-            <div class="tab-pane" id="year">
-                <h3>Anual - {{date | date:'yyyy' }}</h3>
-            </div>
-        </div>
-
-    </div>
+    <periodic-charts class="col-md-6"> </periodic-charts>
 
 
     <div class="col-md-6" ng-controller="ChartLastMinutesCtrl">
-        <h3>Consumo Últimos 5 minutos [kW]</h3>
+        <h3 style="margin-top:63px">Consumo Últimos 5 minutos [kW]</h3>
         <canvas class="chart chart-line"
                 chart-data="data"
-                chart_labels="labels"
+                chart-labels="labels"
                 chart-series="series"
                 chart-options="options"
         ></canvas>

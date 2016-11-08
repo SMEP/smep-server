@@ -11,14 +11,6 @@ angular.module('smep')
         $scope.labels = [] ;
         $scope.series = [ "Consumo Instantâneo" ];
 
-        // Init Data
-       /* for( var i = 0; i < 100; i++) {
-            $scope.data[0].push( 0 );
-            var d = moment().hour( date.getHours() ).minute(date.getMinutes()).second( date.getSeconds() );
-            $scope.labels.push( d );
-            date.setSeconds( date.getSeconds() - 3 );
-        }*/
-
 
         var lastTime = 0;
 
@@ -35,9 +27,7 @@ angular.module('smep')
                 xAxes: [{
                     type: 'time',
                     time: {
-                        displayFormats: {
-                            minute: 'h:mm:ss a'
-                        }
+                        unit: 'minute'
                     }
                 }]
             }
@@ -54,9 +44,6 @@ angular.module('smep')
                     var d = moment().hour( data[i].hour ).minute( data[i].minute ).second( data[i].second );
                     time.push(  d );
                 }
-
-                $scope.data.push( consumo );
-                $scope.labels = time;
 
                 lastTime = data[ data.length - 1].received;
 
